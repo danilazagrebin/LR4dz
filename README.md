@@ -53,129 +53,18 @@
 Для логического оператора OR достаточно 4 эпох обучения для корректной работы (Total Error: 0)
  
 ![image](https://user-images.githubusercontent.com/114522298/204098084-edaf9cc7-3362-4d00-9bb3-21a6fb6bc96c.png)
-ппп
+
 Для логического оператора AND достаточно 7 эпох обучения для корректной работы (Total Error: 0)
- 
+
+![image](https://user-images.githubusercontent.com/114522298/204098155-d88c15fc-5c44-44d9-8136-866a5f3a52cf.png)
+
+Для логического оператора NAND достаточно 7 эпох обучения для корректной работы (Total Error: 0).
+
+![image](https://user-images.githubusercontent.com/114522298/204098199-b9278142-0919-436c-9e5a-6c99e5fa14c0.png)
 
 Для логического оператора XOR недостаточно даже 100 эпох обучения для корректной работы (Total Error: 4). Следовательно перцептрон не способен решить эту задачу.
 
- 
-Для логического оператора NAND достаточно 7 эпох обучения для корректной работы (Total Error: 0).
- 
-
- ![image](https://user-images.githubusercontent.com/114522298/195173475-9d4c43cd-1f62-4221-a049-6eaf1eac85d3.png)
-
- ![image](https://user-images.githubusercontent.com/114522298/195173501-4153a067-ea01-4008-8257-8022f3f29416.png)
-
-
-- Реализовать запись данных из скрипта на python в google-таблицу. Данные описывают изменение темпа инфляции на протяжении 11 отсчётных периодов, с учётом стоимости игрового объекта в каждый период.
- ![image](https://user-images.githubusercontent.com/114522298/195173549-fd97f118-3c71-4ce1-b037-22bfe767560b.png)
-![image](https://user-images.githubusercontent.com/114522298/195173592-406cd72d-06ef-4b7b-8ca9-58fcf92fc7db.png)
-
-
- 
-- Создать новый проект на Unity, который будет получать данные из google-таблицы, в которую были записаны данные в предыдущем пункте.  
-![image](https://user-images.githubusercontent.com/114522298/195173636-95e153f7-60cd-4f7a-a5c5-4dbad4b78579.png)
-
-
-- Написать функционал на Unity, в котором будет воспризводиться аудио-файл в зависимости от значения данных из таблицы.
-
-``
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.Networking;
-using SimpleJSON;
-
-public class NewBehaviourScript : MonoBehaviour
-{
-    public AudioClip goodSpeak;
-
-public AudioClip normalSpeak;
-
-public AudioClip badSpeak;
-private AudioSource selectAudio;
-private Dictionary<string,float> dataSet = new Dictionary<string,float>();
-private bool statusStart = false;
-private int i = 1;
-
-
-    void Start()
-    {
-       StartCoroutine(GoogleSheets());
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        if (dataSet["Mon_" + i.ToString()] <= 10 & statusStart == false & i != dataSet.Count)
-        {
-            StartCoroutine(PlaySelectAudioGood());
-            Debug.Log(dataSet["Mon_" + i.ToString()]);
-        }
-
-        if (dataSet["Mon_" + i.ToString()] > 10 & dataSet["Mon_" + i.ToString()] < 100 & statusStart == false & i != dataSet.Count)
-        {
-            StartCoroutine(PlaySelectAudioNormal());
-            Debug.Log(dataSet["Mon_" + i.ToString()]);
-        }
-
-        if (dataSet["Mon_" + i.ToString()] >= 100 & statusStart == false & i != dataSet.Count)
-        {
-            StartCoroutine(PlaySelectAudioBad());
-            Debug.Log(dataSet["Mon_" + i.ToString()]);
-        }
-    }
-
-    IEnumerator GoogleSheets()
-    {
-        UnityWebRequest curentResp = UnityWebRequest.Get("https://sheets.googleapis.com/v4/spreadsheets/1yCNUMDQsfWEJdTMeGwGsjSK8GJ6ZVnP269S-sDcEirY/values/Лист1?key=AIzaSyAHJY8hqDyNUacM0_fRdUAExpiNZ55ACLE");
-        yield return curentResp.SendWebRequest();
-        string rawResp = curentResp.downloadHandler.text;
-        var rawJson = JSON.Parse(rawResp); 
-        foreach (var itemRawJson in rawJson["values"])
-        {
-        var parseJson = JSON.Parse(itemRawJson.ToString());
-        var selectRow = parseJson[0].AsStringList;
-        dataSet.Add(("Mon_" + selectRow[0]), float.Parse(selectRow[2]));
-        }
-    } 
-
-    IEnumerator PlaySelectAudioGood()
-    {
-        statusStart = true;
-        selectAudio = GetComponent<AudioSource>();
-        selectAudio.clip = goodSpeak;
-        selectAudio.Play();
-        yield return new WaitForSeconds(3);
-        statusStart = false;
-        i++;
-    }
-    IEnumerator PlaySelectAudioNormal()
-    {
-        statusStart = true;
-        selectAudio = GetComponent<AudioSource>();
-        selectAudio.clip = normalSpeak;
-        selectAudio.Play();
-        yield return new WaitForSeconds(3);
-        statusStart = false;
-        i++;
-    }
-    IEnumerator PlaySelectAudioBad()
-    {
-        statusStart = true;
-        selectAudio = GetComponent<AudioSource>();
-        selectAudio.clip = badSpeak;
-        selectAudio.Play();
-        yield return new WaitForSeconds(4);
-        statusStart = false;
-        i++;
-    }
-}
-``
-
-
+![image](https://user-images.githubusercontent.com/114522298/204098168-4fd04fa2-ac0d-4540-891d-5496772c4fbb.png)
 
 ## Задание 2
 ### Реализовать запись в Google-таблицу набора данных, полученных с помощью линейной регрессии из лабораторной работы № 1. 
